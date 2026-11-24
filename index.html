@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kopia — Aynısını Çek · Ev partisi fotoğraf oyunu</title>
+<meta name="description" content="Ebe evin bir köşesini çeker, herkes aynısını çekmeye koşar. 2–8 kişilik telefonla oynanan ev partisi oyunu. 5 mod, her modda 2 oyun bedava.">
+<meta name="theme-color" content="#EEE8DC">
+<meta property="og:title" content="Kopia — Aynısını Çek">
+<meta property="og:description" content="Ebe evin bir köşesini çeker. Herkes aynısını çekmeye koşar. 2–8 kişi, 5 mod.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/ekran-ana.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='5' y='9' width='25' height='30' stroke='%2317140F' stroke-width='3.2' fill='none' transform='rotate(-7 17.5 24)'/%3E%3Crect x='17' y='7' width='25' height='30' fill='%23D42F1C' transform='rotate(5 29.5 22)'/%3E%3Ccircle cx='29.5' cy='20' r='5' fill='none' stroke='%23FCFAF5' stroke-width='2.6' transform='rotate(5 29.5 22)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Familjen+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kagit: #EEE8DC; --kagit-acik: #F7F3EB; --baski: #FCFAF5;
+    --murekkep: #17140F; --murekkep-y: #3B352D; --soluk: #7B7266; --cizgi: #D6CCBB;
+    --kirmizi: #D42F1C; --kirmizi-b: #A82314; --yesil: #2D6A45;
+    --karanlik: #131110; --karanlik-kart: #1F1C19; --karanlik-cizgi: #3A3530; --karanlik-yazi: #EEE6D6; --karanlik-soluk: #9A9081;
+    --ekran: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    --govde: 'Familjen Grotesk', system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --gen: 1180px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--kagit); color: var(--murekkep); font: 400 18px/1.55 var(--govde); -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  .kap { max-width: var(--gen); margin: 0 auto; padding: 0 24px; }
+  .ust-etiket { font: 500 12.5px/1.4 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--soluk); }
+  .ust-etiket.vurgu { color: var(--kirmizi); }
+  .bas { font-family: var(--ekran); font-weight: 900; text-transform: uppercase; line-height: .9; letter-spacing: .005em; margin: 0; }
+  .kirmizi { color: var(--kirmizi); }
+  ::selection { background: var(--kirmizi); color: var(--baski); }
+
+  /* --- film kenarı şeridi --- */
+  .serit { background: var(--murekkep); color: var(--karanlik-soluk); font: 500 11.5px/1 var(--mono); letter-spacing: .2em; overflow: hidden; white-space: nowrap; }
+  .serit-ic { display: inline-flex; gap: 48px; padding: 9px 0; animation: kay 40s linear infinite; }
+  .serit-ic span b { color: var(--kirmizi); font-weight: 600; }
+  @keyframes kay { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .serit-ic { animation: none; } }
+
+  /* --- üst menü --- */
+  header.menu { border-bottom: 1.5px solid var(--murekkep); }
+  .menu .kap { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 24px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo b { font: 900 34px/1 var(--ekran); letter-spacing: .02em; padding-top: 4px; }
+  nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  nav a { text-decoration: none; font: 600 15px var(--govde); }
+  nav a:hover { color: var(--kirmizi); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 24px; border-radius: 4px; text-decoration: none; font: 800 22px/1 var(--ekran); letter-spacing: .06em; text-transform: uppercase; border: 2px solid var(--murekkep); transition: transform .12s ease, background .12s ease; }
+  .btn:active { transform: translateY(2px); }
+  .btn.dolu { background: var(--murekkep); color: var(--kagit-acik); }
+  .btn.kirmizi-btn { background: var(--kirmizi); border-color: var(--kirmizi); color: var(--baski); }
+  .btn.kirmizi-btn:hover { background: var(--kirmizi-b); border-color: var(--kirmizi-b); }
+  .btn.dolu:hover { background: #000; }
+  .btn small { display: block; font: 500 10px/1 var(--mono); letter-spacing: .16em; opacity: .7; margin-bottom: 3px; }
+  .btn .iki-satir { display: flex; flex-direction: column; align-items: flex-start; padding-top: 3px; }
+  .menu .btn { min-height: 44px; font-size: 18px; padding: 0 16px; }
+  @media (max-width: 860px) { nav ul { display: none; } }
+
+  /* --- hero --- */
+  .hero { padding: 64px 0 88px; position: relative; overflow: hidden; }
+  .hero .kap { display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; }
+  .hero h1 { font-size: clamp(76px, 11.5vw, 168px); margin: 14px 0 22px; }
+  .hero p.giris { font-size: clamp(19px, 2vw, 23px); line-height: 1.45; max-width: 31ch; margin: 0 0 30px; color: var(--murekkep-y); }
+  .hero p.giris strong { color: var(--murekkep); font-weight: 700; }
+  .butonlar { display: flex; flex-wrap: wrap; gap: 12px; }
+  .ozet { display: flex; gap: 0; margin-top: 38px; border-top: 1.5px solid var(--murekkep); border-bottom: 1.5px solid var(--murekkep); max-width: 520px; }
+  .ozet div { flex: 1; padding: 12px 14px 10px 0; }
+  .ozet div + div { border-left: 1px solid var(--cizgi); padding-left: 14px; }
+  .ozet b { display: block; font: 900 34px/1 var(--ekran); padding-top: 6px; }
+
+  .sahne { position: relative; height: 640px; }
+  .telefon { position: absolute; right: 8%; top: 0; width: 300px; aspect-ratio: 390/844; border-radius: 40px; background: var(--murekkep); padding: 11px; box-shadow: 0 30px 60px -20px rgba(23,20,15,.45), 0 0 0 1.5px #000; transform: rotate(3deg); z-index: 3; }
+  .telefon .cam { height: 100%; background: var(--kagit); border-radius: 30px; padding-top: 34px; overflow: hidden; }
+  .telefon img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .telefon::before { content: ''; position: absolute; top: 20px; left: 50%; width: 84px; height: 22px; margin-left: -42px; border-radius: 12px; background: #000; z-index: 2; }
+  .baski { position: absolute; background: var(--baski); padding: 10px 10px 34px; box-shadow: 0 10px 24px -8px rgba(23,20,15,.35); }
+  .baski svg { display: block; width: 100%; height: auto; background: #E3DACA; }
+  .baski figcaption { position: absolute; left: 12px; bottom: 9px; font: 500 11px/1 var(--mono); letter-spacing: .16em; color: var(--murekkep-y); }
+  .baski.hedef { width: 230px; left: -6%; top: 40px; transform: rotate(-8deg); z-index: 1; }
+  .baski.kopya { width: 210px; left: 12%; top: 330px; transform: rotate(5deg); z-index: 4; }
+  .damga { position: absolute; right: -22px; top: -26px; width: 92px; height: 92px; border-radius: 50%; background: var(--kirmizi); color: var(--baski); display: grid; place-items: center; text-align: center; transform: rotate(-10deg); box-shadow: 0 8px 18px -6px rgba(168,35,20,.6); }
+  .damga b { font: 900 44px/1 var(--ekran); display: block; padding-top: 6px; }
+  .damga span { font: 600 9px/1 var(--mono); letter-spacing: .18em; display: block; margin-top: -2px; }
+
+  @media (max-width: 980px) {
+    .hero .kap { grid-template-columns: 1fr; }
+    .sahne { height: 560px; max-width: 520px; margin: 0 auto; width: 100%; }
+    .telefon { width: 250px; right: 4%; }
+  }
+  @media (max-width: 520px) {
+    .sahne { height: 470px; }
+    .telefon { width: 210px; right: 0; }
+    .baski.hedef { width: 170px; }
+    .baski.kopya { width: 160px; left: 4%; top: 260px; }
+  }
+
+  /* --- bölümler --- */
+  section { padding: 96px 0; }
+  .bolum-bas { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; border-bottom: 1.5px solid currentColor; padding-bottom: 14px; margin-bottom: 44px; flex-wrap: wrap; }
+  .bolum-bas h2 { font-size: clamp(54px, 7vw, 96px); }
+  .bolum-bas p { max-width: 38ch; margin: 0; color: var(--murekkep-y); }
+
+  /* nasıl oynanır: karanlık oda */
+  .karanlik { background: var(--karanlik); color: var(--karanlik-yazi); }
+  .karanlik .bolum-bas p { color: var(--karanlik-soluk); }
+  .karanlik .ust-etiket { color: var(--karanlik-soluk); }
+  .adimlar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .adim { padding: 0 32px 0 0; }
+  .adim + .adim { border-left: 1px solid var(--karanlik-cizgi); padding-left: 32px; }
+  .adim .no { font: 900 120px/.85 var(--ekran); color: var(--kirmizi); display: block; margin-bottom: 18px; }
+  .adim h3 { font: 900 38px/1 var(--ekran); text-transform: uppercase; margin: 0 0 12px; }
+  .adim p { margin: 0; color: var(--karanlik-soluk); font-size: 17px; }
+  .adim svg { margin: 0 0 22px; }
+  @media (max-width: 860px) {
+    .adimlar { grid-template-columns: 1fr; gap: 40px; }
+    .adim + .adim { border-left: 0; padding-left: 0; border-top: 1px solid var(--karanlik-cizgi); padding-top: 40px; }
+  }
+
+  /* modlar */
+  .modlar { border-top: 1.5px solid var(--murekkep); }
+  .mod { display: grid; grid-template-columns: 70px 80px 1fr 1.05fr; gap: 24px; padding: 34px 0; border-bottom: 1px solid var(--cizgi); align-items: start; }
+  .mod:last-child { border-bottom: 1.5px solid var(--murekkep); }
+  .mod .no { font: 600 13px/1 var(--mono); letter-spacing: .12em; color: var(--soluk); padding-top: 14px; }
+  .mod .ikon { width: 72px; height: 72px; background: var(--murekkep); display: grid; place-items: center; border-radius: 3px; }
+  .mod h3 { font: 900 64px/.92 var(--ekran); text-transform: uppercase; margin: 0 0 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .mod .slogan { color: var(--kirmizi); font-weight: 700; font-size: 19px; margin: 0 0 10px; }
+  .mod .aciklama { margin: 0; color: var(--murekkep-y); }
+  .rozet { font: 600 11px/1 var(--mono); letter-spacing: .14em; border: 1.5px solid var(--kirmizi); color: var(--kirmizi); padding: 5px 7px 4px; border-radius: 3px; position: relative; top: -6px; }
+  .rozet.koyu { border-color: var(--murekkep); color: var(--murekkep); }
+  .puanlar { list-style: none; margin: 0; padding: 0; border-top: 1.5px solid var(--murekkep); }
+  .puanlar li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--cizgi); font-weight: 600; font-size: 16px; }
+  .puanlar li b { font: 900 26px/1 var(--ekran); color: var(--kirmizi); }
+  @media (max-width: 980px) {
+    .mod { grid-template-columns: 56px 1fr; }
+    .mod .no { display: none; }
+    .mod .ikon { width: 56px; height: 56px; }
+    .mod > div:nth-child(3) { grid-column: 2; }
+    .mod .puanlar { grid-column: 1 / -1; }
+    .mod h3 { font-size: 52px; }
+  }
+
+  /* puanlama */
+  .puan-blok { display: grid; grid-template-columns: auto 1fr; gap: 56px; align-items: center; }
+  .dev-puan { font: 900 clamp(180px, 26vw, 320px)/.8 var(--ekran); color: var(--kirmizi); margin: 0; padding-top: 30px; }
+  .olcek { margin-top: 28px; }
+  .olcek .cubuk { height: 14px; background: linear-gradient(90deg, var(--cizgi) 0 55%, var(--murekkep) 55% 100%); position: relative; border-radius: 2px; }
+  .olcek .cubuk i { position: absolute; left: 87%; top: -8px; width: 3px; height: 30px; background: var(--kirmizi); }
+  .olcek .yazilar { display: flex; justify-content: space-between; margin-top: 10px; }
+  @media (max-width: 860px) { .puan-blok { grid-template-columns: 1fr; gap: 12px; } }
+
+  /* ekranlar */
+  .ekranlar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; align-items: start; }
+  .ekranlar figure { margin: 0; }
+  .ekranlar .telefon-k { border-radius: 36px; background: var(--murekkep); padding: 10px; box-shadow: 0 24px 48px -20px rgba(23,20,15,.45); }
+  .ekranlar .telefon-k img { border-radius: 27px; aspect-ratio: 390/844; object-fit: cover; object-position: top; width: 100%; }
+  .ekranlar figure:nth-child(2) { margin-top: 56px; }
+  .ekranlar figcaption { margin-top: 16px; }
+  .ekranlar figcaption b { display: block; font: 900 28px/1 var(--ekran); text-transform: uppercase; margin-top: 6px; }
+  @media (max-width: 860px) {
+    .ekranlar { grid-template-columns: repeat(3, 72%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; gap: 20px; }
+    .ekranlar figure { scroll-snap-align: start; }
+    .ekranlar figure:nth-child(2) { margin-top: 0; }
+  }
+
+  /* fiyat */
+  .fiyatlar { display: grid; grid-template-columns: 1fr 1.25fr; gap: 24px; }
+  .fiyat { border: 1.5px solid var(--murekkep); border-radius: 4px; padding: 32px; background: var(--kagit-acik); display: flex; flex-direction: column; }
+  .fiyat.paket { background: var(--karanlik); color: var(--karanlik-yazi); border-color: var(--karanlik); }
+  .fiyat .buyuk { font: 900 clamp(110px, 12vw, 160px)/.82 var(--ekran); margin: 20px 0 6px; padding-top: 14px; }
+  .fiyat .alt { font: 900 40px/1 var(--ekran); text-transform: uppercase; }
+  .fiyat ul { list-style: none; padding: 0; margin: 26px 0 0; border-top: 1.5px solid currentColor; }
+  .fiyat li { padding: 12px 0 12px 30px; border-bottom: 1px solid var(--cizgi); position: relative; font-size: 16.5px; }
+  .fiyat.paket li { border-bottom-color: var(--karanlik-cizgi); color: var(--karanlik-yazi); }
+  .fiyat li::before { content: ''; position: absolute; left: 2px; top: 18px; width: 14px; height: 7px; border-left: 2px solid var(--kirmizi); border-bottom: 2px solid var(--kirmizi); transform: rotate(-45deg); }
+  .film { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 22px; }
+  .film span { aspect-ratio: 1.35; border: 1px solid var(--karanlik-cizgi); border-radius: 2px; font: 500 10px/1 var(--mono); color: var(--karanlik-soluk); padding: 6px; display: flex; align-items: flex-end; }
+  .fiyat .not { margin-top: auto; padding-top: 22px; font-size: 14px; color: var(--soluk); }
+  .fiyat.paket .not { color: var(--karanlik-soluk); }
+  @media (max-width: 860px) { .fiyatlar { grid-template-columns: 1fr; } }
+
+  /* güvenlik */
+  .guven { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1.5px solid var(--murekkep); border-bottom: 1.5px solid var(--murekkep); }
+  .guven div { padding: 26px 24px 26px 0; }
+  .guven div + div { border-left: 1px solid var(--cizgi); padding-left: 24px; }
+  .guven h3 { font: 900 30px/1 var(--ekran); text-transform: uppercase; margin: 14px 0 8px; }
+  .guven p { margin: 0; font-size: 16px; color: var(--murekkep-y); }
+  @media (max-width: 860px) {
+    .guven { grid-template-columns: 1fr 1fr; }
+    .guven div:nth-child(3) { border-left: 0; padding-left: 0; }
+    .guven div:nth-child(n+3) { border-top: 1px solid var(--cizgi); }
+  }
+  @media (max-width: 520px) {
+    .guven { grid-template-columns: 1fr; }
+    .guven div + div { border-left: 0; padding-left: 0; border-top: 1px solid var(--cizgi); }
+  }
+
+  /* sss */
+  .sss { border-top: 1.5px solid var(--murekkep); max-width: 860px; }
+  .sss details { border-bottom: 1px solid var(--cizgi); }
+  .sss summary { list-style: none; cursor: pointer; padding: 22px 48px 22px 0; font: 900 30px/1.05 var(--ekran); text-transform: uppercase; position: relative; }
+  .sss summary::-webkit-details-marker { display: none; }
+  .sss summary::after { content: '+'; position: absolute; right: 4px; top: 16px; font: 900 40px/1 var(--ekran); color: var(--kirmizi); transition: transform .2s; }
+  .sss details[open] summary::after { transform: rotate(45deg); }
+  .sss details p { margin: 0 0 22px; max-width: 62ch; color: var(--murekkep-y); }
+
+  /* indir */
+  .indir { background: var(--kirmizi); color: var(--baski); padding: 88px 0; }
+  .indir .kap { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; }
+  .indir h2 { font-size: clamp(64px, 9vw, 132px); }
+  .indir .btn { border-color: var(--baski); }
+  .indir .btn.dolu { background: var(--murekkep); border-color: var(--murekkep); }
+
+  footer { padding: 56px 0 40px; }
+  footer .kap { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: end; }
+  footer .kelime { font: 900 clamp(110px, 20vw, 260px)/.78 var(--ekran); letter-spacing: .01em; margin: 0; padding-top: 30px; }
+  footer ul { list-style: none; margin: 0; padding: 0; text-align: right; }
+  footer li { margin: 6px 0; }
+  footer a { text-decoration: none; font-weight: 600; }
+  footer a:hover { color: var(--kirmizi); }
+  .telif { border-top: 1.5px solid var(--murekkep); margin-top: 28px; padding-top: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  @media (max-width: 640px) { footer .kap { grid-template-columns: 1fr; } footer ul { text-align: left; } }
+
+  :focus-visible { outline: 3px solid var(--kirmizi); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<!-- Film kenarı şeridi -->
+<div class="serit" aria-hidden="true">
+  <div class="serit-ic">
+    <span>KOPIA 400</span><span><b>●</b> EV PARTİSİ</span><span>2–8 KİŞİ</span><span>5 MOD</span><span><b>●</b> HER MODDA 2 OYUN BEDAVA</span><span>GALERİ YOK · SADECE KAMERA</span><span>FOTOĞRAFLAR 24 SAATTE SİLİNİR</span>
+    <span>KOPIA 400</span><span><b>●</b> EV PARTİSİ</span><span>2–8 KİŞİ</span><span>5 MOD</span><span><b>●</b> HER MODDA 2 OYUN BEDAVA</span><span>GALERİ YOK · SADECE KAMERA</span><span>FOTOĞRAFLAR 24 SAATTE SİLİNİR</span>
+  </div>
+</div>
+
+<header class="menu">
+  <div class="kap">
+    <a class="logo" href="#" aria-label="Kopia ana sayfa">
+      <svg width="40" height="40" viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="9" width="25" height="30" stroke="#17140F" stroke-width="3.2" fill="none" transform="rotate(-7 17.5 24)"/><rect x="17" y="7" width="25" height="30" fill="#D42F1C" transform="rotate(5 29.5 22)"/><circle cx="29.5" cy="20" r="5" fill="none" stroke="#FCFAF5" stroke-width="2.6" transform="rotate(5 29.5 22)"/></svg>
+      <b>KOPIA</b>
+    </a>
+    <nav aria-label="Bölümler">
+      <ul>
+        <li><a href="#nasil">Nasıl oynanır</a></li>
+        <li><a href="#modlar">Modlar</a></li>
+        <li><a href="#fiyat">Fiyat</a></li>
+        <li><a href="#sss">Sorular</a></li>
+      </ul>
+    </nav>
+    <a class="btn dolu" href="#indir">İndir</a>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="hero">
+  <div class="kap">
+    <div>
+      <span class="ust-etiket vurgu">● Telefonla oynanan ev partisi oyunu</span>
+      <h1 class="bas">Aynısını<br>çek<span class="kirmizi">.</span></h1>
+      <p class="giris"><strong>Ebe evin bir köşesini çeker.</strong> Başlat'a basınca herkes aynı yeri, aynı açıdan çekmeye koşar. En benzer kareyi yakalayan kazanır.</p>
+      <div class="butonlar">
+        <a class="btn dolu" href="#indir"><span class="iki-satir"><small>YAKINDA</small>App Store</span></a>
+        <a class="btn dolu" href="#indir"><span class="iki-satir"><small>YAKINDA</small>Google Play</span></a>
+      </div>
+      <div class="ozet">
+        <div><span class="ust-etiket">Oyuncu</span><b>2–8</b></div>
+        <div><span class="ust-etiket">Mod</span><b>5</b></div>
+        <div><span class="ust-etiket">Bedava oyun</span><b>10</b></div>
+      </div>
+    </div>
+
+    <div class="sahne" aria-hidden="true">
+      <figure class="baski hedef">
+        <svg viewBox="0 0 200 240"><g fill="none" stroke="#17140F" stroke-width="2.4" stroke-linecap="square">
+          <path d="M0 176h200"/><path d="M28 176V70h58v106"/><path d="M36 80h42v40H36z"/><circle cx="72" cy="128" r="2.4" fill="#17140F"/>
+          <path d="M120 40h56v40h-56z"/><path d="M128 72l12-14 10 10 8-8 10 12"/>
+          <path d="M150 176v-34"/><path d="M150 142c-18-6-22-26-8-34 4 12 14 16 8 34z"/><path d="M150 142c16-4 22-22 10-32-6 10-12 14-10 32z"/>
+          <path d="M138 176h24l-3-12h-18z"/></g></svg>
+        <figcaption>HEDEF · AYŞE</figcaption>
+      </figure>
+      <div class="telefon"><div class="cam"><img src="img/ekran-ana.png" alt=""></div></div>
+      <figure class="baski kopya">
+        <svg viewBox="0 0 200 240"><g transform="translate(-9 4) rotate(-2 100 120)" fill="none" stroke="#17140F" stroke-width="2.4" stroke-linecap="square">
+          <path d="M0 176h220"/><path d="M28 176V70h58v106"/><path d="M36 80h42v40H36z"/><circle cx="72" cy="128" r="2.4" fill="#17140F"/>
+          <path d="M120 40h56v40h-56z"/><path d="M128 72l12-14 10 10 8-8 10 12"/>
+          <path d="M150 176v-34"/><path d="M150 142c-18-6-22-26-8-34 4 12 14 16 8 34z"/><path d="M150 142c16-4 22-22 10-32-6 10-12 14-10 32z"/>
+          <path d="M138 176h24l-3-12h-18z"/></g></svg>
+        <figcaption>KOPYA · MERT</figcaption>
+        <div class="damga"><div><b>87</b><span>TUTTU</span></div></div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- NASIL OYNANIR -->
+<section class="karanlik" id="nasil">
+  <div class="kap">
+    <div class="bolum-bas">
+      <h2 class="bas">Nasıl<br>oynanır</h2>
+      <p>Herkes aynı evde, herkesin elinde telefonu. Kayıt yok: isim yaz, kodu gir, oyna.</p>
+    </div>
+    <div class="adimlar">
+      <div class="adim">
+        <span class="no">01</span>
+        <h3>Salonda toplanın</h3>
+        <p>Biri oda kurar, diğerleri 5 harfli kodu yazar ya da QR'ı okutur. Sıra gelen ebe olur.</p>
+      </div>
+      <div class="adim">
+        <span class="no">02</span>
+        <h3>Ebe saklar</h3>
+        <p>Ebe kimse görmeden evin içine dağılır, zor ama bulunabilir bir köşenin fotoğrafını çeker ve salona döner.</p>
+      </div>
+      <div class="adim">
+        <span class="no">03</span>
+        <h3>Herkes koşar</h3>
+        <p>Başlat! Hedef herkesin ekranına düşer. Aynı yeri aynı açıdan çek; Kopia 0–100 arası benzerlik puanı verir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODLAR -->
+<section id="modlar">
+  <div class="kap">
+    <div class="bolum-bas">
+      <h2 class="bas">5 mod</h2>
+      <p>Hepsi aynı evde oynanır; her biri oyunu başka bir yerden yakalar. Her modda ilk 2 oyun bedava.</p>
+    </div>
+    <div class="modlar">
+
+      <article class="mod">
+        <span class="no">01</span>
+        <div class="ikon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F7F3EB" stroke-width="1.8"><rect x="3" y="5" width="11" height="13"/><rect x="10" y="7" width="11" height="13" fill="#F7F3EB"/></svg></div>
+        <div>
+          <h3>Klasik</h3>
+          <p class="slogan">Ebe saklar, herkes bulur.</p>
+          <p class="aciklama">Oyunun özü. Ebe evin bir köşesini çeker; hedef ekrana düşünce herkes aynı kareyi yakalamaya koşar. En benzer kare kazanır.</p>
+        </div>
+        <ul class="puanlar">
+          <li>En benzer kare <b>+3</b></li>
+          <li>Eşiği geçen herkes <b>+1</b></li>
+          <li>Ebe: bazıları bulduysa <b>+2</b></li>
+        </ul>
+      </article>
+
+      <article class="mod">
+        <span class="no">02</span>
+        <div class="ikon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F7F3EB" stroke-width="1.8"><path d="M13.5 2.5L5.5 13.5h6l-1.5 8 8-11h-6l1.5-8z"/></svg></div>
+        <div>
+          <h3>Yıldırım</h3>
+          <p class="slogan">Bir dakika. İlk bulan alır.</p>
+          <p class="aciklama">45–120 saniyelik turlar. Eşiği ilk geçen 5 puanı kapar; bulduğun an sıran kilitlenir. Salon bir anda boşalır.</p>
+        </div>
+        <ul class="puanlar">
+          <li>1. bulan <b>+5</b></li>
+          <li>2. bulan <b>+3</b></li>
+          <li>3. bulan <b>+2</b></li>
+          <li>Sonraki bulanlar <b>+1</b></li>
+        </ul>
+      </article>
+
+      <article class="mod">
+        <span class="no">03</span>
+        <div class="ikon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F7F3EB" stroke-width="1.8"><path d="M3.5 8V3.5H8M16 3.5h4.5V8M20.5 16v4.5H16M8 20.5H3.5V16"/><rect x="10" y="10" width="4" height="4" fill="#F7F3EB"/></svg></div>
+        <div>
+          <h3>Yakın Plan <span class="rozet">YENİ</span></h3>
+          <p class="slogan">Önce bir ayrıntı. Kare açıldıkça puan düşer.</p>
+          <p class="aciklama">Başta hedefin sadece küçük bir parçası görünür: bir dolap kulpu, bir halı deseni. Kare zamanla genişler. Ne kadar erken bulursan o kadar çok puan.</p>
+        </div>
+        <ul class="puanlar">
+          <li>Sadece ayrıntı varken <b>+5</b></li>
+          <li>Geniş karede <b>+3</b></li>
+          <li>Tam fotoğrafta <b>+1</b></li>
+        </ul>
+      </article>
+
+      <article class="mod">
+        <span class="no">04</span>
+        <div class="ikon"><svg width="40" height="40" viewBox="0 0 24 24" fill="#F7F3EB"><path d="M4 6h6v6.5L7.5 18H5l2-5.5H4z"/><path d="M14 6h6v6.5L17.5 18H15l2-5.5h-3z"/></svg></div>
+        <div>
+          <h3>Tarif <span class="rozet">YENİ</span></h3>
+          <p class="slogan">Fotoğraf yok. Sadece ebenin sözleri.</p>
+          <p class="aciklama">“Soğuk, beyaz, kapısı olan bir şeyin üstü.” Kimse hedefi görmez. Çektiğin her karenin puanı sıcak-soğuk gibi yol gösterir; tur bitince hedef açılır.</p>
+        </div>
+        <ul class="puanlar">
+          <li>En yakın kare <b>+3</b></li>
+          <li>Eşiği geçen herkes <b>+1</b></li>
+          <li>Ebe: tarifle biri bulduysa <b>+2</b></li>
+        </ul>
+      </article>
+
+      <article class="mod">
+        <span class="no">05</span>
+        <div class="ikon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F7F3EB" stroke-width="1.8"><path d="M5 20.5V10a7 7 0 0114 0v10.5l-2.4-1.8-2.3 1.8-2.3-1.8-2.3 1.8-2.3-1.8z"/><rect x="8.6" y="9.5" width="1.8" height="2.6" fill="#F7F3EB" stroke="none"/><rect x="13.6" y="9.5" width="1.8" height="2.6" fill="#F7F3EB" stroke="none"/></svg></div>
+        <div>
+          <h3>Hayalet <span class="rozet">YENİ</span> <span class="rozet koyu">4+ KİŞİ</span></h3>
+          <p class="slogan">Biriniz hedefi görmüyor.</p>
+          <p class="aciklama">Her tur gizlice bir hayalet seçilir. Hayaletin ekranında hedef yoktur: diğerlerinin peşine takılır, çaktırmadan aynı kareyi çekmeye çalışır. Süre bitince kareler yan yana açılır ve herkes hayaleti oylar.</p>
+        </div>
+        <ul class="puanlar">
+          <li>Hayaleti doğru oylayan <b>+2</b></li>
+          <li>Yakalanmayan hayalet <b>+4</b></li>
+          <li>Hedefi bulan <b>+1</b></li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- PUANLAMA -->
+<section style="padding-top: 24px;">
+  <div class="kap puan-blok">
+    <p class="dev-puan" aria-hidden="true">87</p>
+    <div>
+      <span class="ust-etiket vurgu">● Benzerlik puanı</span>
+      <h2 class="bas" style="font-size: clamp(48px, 6vw, 80px); margin: 14px 0 16px;">Göz kararı değil</h2>
+      <p style="max-width: 46ch; color: var(--murekkep-y); margin: 0;">Kopia iki kareyi karşılaştırır: ne çekildiği, nereden ve hangi açıdan. Sonuç 0–100 arası tek bir sayı. Eşiği geçen “buldu” sayılır; zorluğu kurucu seçer. Hedefin kendisini indirip yüklemek işe yaramaz, fotoğraf sadece uygulama içi kamerayla çekilir.</p>
+      <div class="olcek" aria-hidden="true">
+        <div class="cubuk"><i></i></div>
+        <div class="yazilar"><span class="ust-etiket">0 · alakasız</span><span class="ust-etiket">55 · eşik</span><span class="ust-etiket">100 · aynısı</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EKRANLAR -->
+<section style="background: var(--kagit-acik); border-top: 1.5px solid var(--murekkep); border-bottom: 1.5px solid var(--murekkep);">
+  <div class="kap">
+    <div class="bolum-bas">
+      <h2 class="bas">Karanlık oda</h2>
+      <p>Fotoğraf kâğıdı, mürekkep siyahı, tek bir kırmızı. Kamera ekranları karanlık: gece de rahat oynanır.</p>
+    </div>
+    <div class="ekranlar">
+      <figure>
+        <div class="telefon-k"><img src="img/ekran-lobi.png" alt="Lobi ekranı: oda kodu, QR, mod ve ayarlar"></div>
+        <figcaption><span class="ust-etiket">01 · Lobi</span><b>Kod, QR, ayarlar</b></figcaption>
+      </figure>
+      <figure>
+        <div class="telefon-k"><img src="img/ekran-hayalet.png" alt="Hayalet modunun kuralları ve puanları"></div>
+        <figcaption><span class="ust-etiket">02 · Modlar</span><b>Her modun kuralı içinde</b></figcaption>
+      </figure>
+      <figure>
+        <div class="telefon-k"><img src="img/ekran-magaza.png" alt="Mağaza: 15 oyunluk paket"></div>
+        <figcaption><span class="ust-etiket">03 · Paket</span><b>15 oyun, süresiz</b></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- FİYAT -->
+<section id="fiyat">
+  <div class="kap">
+    <div class="bolum-bas">
+      <h2 class="bas">Fiyat</h2>
+      <p>Reklam yok, abonelik yok. Sadece odayı kurup oyunu başlatan öder; katılanlar her zaman bedava.</p>
+    </div>
+    <div class="fiyatlar">
+      <div class="fiyat">
+        <span class="ust-etiket">Herkese</span>
+        <div class="buyuk">0 ₺</div>
+        <div class="alt">Her modda 2 oyun</div>
+        <ul>
+          <li>5 modun her birinde ilk 2 oyun bedava: toplam 10 oyun</li>
+          <li>Odaya katılmak her zaman bedava</li>
+          <li>Kayıt yok, reklam yok</li>
+        </ul>
+        <p class="not">Bedava oyunların bitse de başkasının odasına katılmaya her zaman devam edersin.</p>
+      </div>
+      <div class="fiyat paket">
+        <span class="ust-etiket vurgu" style="color: var(--kirmizi);">● Oyun paketi</span>
+        <div class="buyuk">30 ₺</div>
+        <div class="alt">15 oyun · oyun başına 2 ₺</div>
+        <div class="film" aria-hidden="true"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span></div>
+        <ul>
+          <li>Bütün modlarda geçer, süresi dolmaz</li>
+          <li>Hiç tur oynanmadan biten oyunun hakkı geri gelir</li>
+          <li>Aynı ekiple “tekrar oyna” tek dokunuş</li>
+        </ul>
+        <p class="not">Ödeme App Store / Google Play üzerinden alınır.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GÜVENLİK -->
+<section style="padding-top: 0;">
+  <div class="kap">
+    <div class="guven">
+      <div><span class="ust-etiket vurgu">01</span><h3>Galeri yok</h3><p>Fotoğraf sadece uygulama içi kamerayla, oyun sırasında çekilir.</p></div>
+      <div><span class="ust-etiket vurgu">02</span><h3>24 saatte silinir</h3><p>Odalar ve fotoğraflar en geç bir gün sonra otomatik silinir.</p></div>
+      <div><span class="ust-etiket vurgu">03</span><h3>Kayıt yok</h3><p>E-posta, telefon, konum istenmez. İsim yaz, oyna.</p></div>
+      <div><span class="ust-etiket vurgu">04</span><h3>Bildir, engelle</h3><p>Her kare bildirilebilir; iki kişinin bildirdiği kare herkesten gizlenir.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- SSS -->
+<section id="sss" style="padding-top: 0;">
+  <div class="kap">
+    <div class="bolum-bas"><h2 class="bas">Sorular</h2></div>
+    <div class="sss">
+      <details>
+        <summary>Herkesin uygulamayı alması gerekiyor mu?</summary>
+        <p>Evet, herkes kendi telefonundan oynar. Ama ücret sadece odayı kurup oyunu başlatandan düşer; katılanlar hiçbir şey ödemez.</p>
+      </details>
+      <details>
+        <summary>Bir “oyun” ne kadar sürer?</summary>
+        <p>Odadaki herkes sırayla ebe olana kadar devam eder. 4 kişiyle, 3 dakikalık turlarla yaklaşık 15-20 dakika. Kurucu herkesin 2 ya da 3 kez ebe olmasını da seçebilir.</p>
+      </details>
+      <details>
+        <summary>Aynı evde olmak şart mı?</summary>
+        <p>Evet. Kopia herkesin aynı mekânda olduğu, ebenin evin bir köşesini sakladığı bir parti oyunu. Ev, yurt, ofis, kafe: aynı yerde olmanız yeter.</p>
+      </details>
+      <details>
+        <summary>Hayalet modu için kaç kişi gerekiyor?</summary>
+        <p>En az 4 kişi: bir ebe, bir hayalet ve hayaletin arasına karışabileceği en az iki kişi.</p>
+      </details>
+      <details>
+        <summary>Satın aldığım haklar kaybolur mu?</summary>
+        <p>Haklar süresizdir ve bütün modlarda geçer. Hesap telefona bağlı olduğu için uygulamayı silersen haklar da silinir; bu yüzden uygulamayı silmeden önce haklarını kullanmanı öneririz.</p>
+      </details>
+      <details>
+        <summary>Fotoğraflarım nereye gidiyor?</summary>
+        <p>Sadece aynı odadaki oyunculara ve benzerlik puanını hesaplayan sunucuya. Tur bitene kadar senin kareni sadece sen ve ebe görürsün. Bir gün sonra hepsi silinir. Ayrıntılar <a href="gizlilik.html">gizlilik politikasında</a>.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- İNDİR -->
+<section class="indir" id="indir">
+  <div class="kap">
+    <div>
+      <span class="ust-etiket" style="color: var(--baski); opacity: .8;">● Çok yakında</span>
+      <h2 class="bas" style="margin-top: 12px;">Salona<br>toplanın.</h2>
+    </div>
+    <div class="butonlar">
+      <a class="btn dolu" href="#indir" aria-disabled="true"><span class="iki-satir"><small>YAKINDA</small>App Store</span></a>
+      <a class="btn dolu" href="#indir" aria-disabled="true"><span class="iki-satir"><small>YAKINDA</small>Google Play</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="kap">
+    <p class="kelime">KOPIA</p>
+    <ul>
+      <li><a href="gizlilik.html">Gizlilik politikası</a></li>
+      <li><a href="mailto:yusufkgunduz@gmail.com">İletişim</a></li>
+      <li><a href="#modlar">Modlar</a></li>
+    </ul>
+  </div>
+  <div class="kap">
+    <div class="telif">
+      <span class="ust-etiket">© 2026 KOPIA</span>
+      <span class="ust-etiket">Aynısını Çek · Türkiye'de yapıldı</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
